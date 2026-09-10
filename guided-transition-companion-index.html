@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guided Transition Companion</title>
+  <style>
+    :root {
+      --bg: #f5f7f8;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #667085;
+      --line: #d9e0e6;
+      --accent: #2f6f65;
+      --accent2: #eaf4f1;
+      --danger: #9b2c2c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 20px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 22px;
+      margin: 14px 0;
+      box-shadow: 0 4px 18px rgba(0,0,0,.04);
+    }
+    h1, h2, h3 { margin-top: 0; }
+    h1 { font-size: 1.75rem; }
+    h2 { font-size: 1.25rem; }
+    p { line-height: 1.55; }
+    .muted { color: var(--muted); }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; }
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+    }
+    button.secondary {
+      background: white;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+    button.soft {
+      background: var(--accent2);
+      color: var(--accent);
+    }
+    button.danger { background: var(--danger); }
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      font-size: 1rem;
+      margin-top: 6px;
+      background: white;
+    }
+    textarea { min-height: 92px; resize: vertical; }
+    label { display: block; margin: 14px 0; font-weight: 600; }
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .choice {
+      width: 100%;
+      text-align: left;
+      margin: 6px 0;
+      background: white;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+    .choice:hover { background: var(--accent2); }
+    .chat {
+      height: 340px;
+      overflow-y: auto;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfcfc;
+      margin-bottom: 10px;
+    }
+    .msg {
+      max-width: 84%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      margin: 8px 0;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+    .user { margin-left: auto; background: var(--accent); color: white; }
+    .ai { background: white; border: 1px solid var(--line); }
+    .safety {
+      border-left: 5px solid var(--danger);
+      background: #fff6f6;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .small { font-size: .9rem; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <strong id="brand">Guided Transition Companion</strong>
+    <button class="secondary small" id="langBtn">עברית</button>
+  </div>
+
+  <section id="welcome" class="screen active card">
+    <h1 data-en="Welcome" data-he="ברוכים הבאים">Welcome</h1>
+    <p data-en="Thank you for your service. This is a private space to help you think through what comes next, at your pace."
+       data-he="תודה על השירות שלך. זהו מרחב פרטי שיעזור לך לחשוב על השלב הבא, בקצב שלך.">
+       Thank you for your service. This is a private space to help you think through what comes next, at your pace.
+    </p>
+    <p class="muted"
+       data-en="You can skip questions, change topics, edit what is saved, or delete everything."
+       data-he="אפשר לדלג על שאלות, לשנות נושא, לערוך מה שנשמר או למחוק הכול.">
+       You can skip questions, change topics, edit what is saved, or delete everything.
+    </p>
+    <button onclick="go('focus')" data-en="Start" data-he="התחלה">Start</button>
+  </section>
+
+  <section id="focus" class="screen card">
+    <h2 data-en="Where would you like to start?" data-he="מאיפה תרצה להתחיל?">Where would you like to start?</h2>
+    <button class="choice" onclick="pickFocus('Work or career')" data-en="Work or career" data-he="עבודה או קריירה">Work or career</button>
+    <button class="choice" onclick="pickFocus('Study or education')" data-en="Study or education" data-he="לימודים או השכלה">Study or education</button>
+    <button class="choice" onclick="pickFocus('Emotional support')" data-en="Emotional support" data-he="תמיכה רגשית">Emotional support</button>
+    <button class="choice" onclick="pickFocus('Relationships or family')" data-en="Relationships or family" data-he="זוגיות או משפחה">Relationships or family</button>
+    <button class="choice" onclick="pickFocus('Money')" data-en="Money" data-he="כסף">Money</button>
+    <button class="choice" onclick="pickFocus('Travel or reset')" data-en="Travel or reset" data-he="נסיעה או הפוגה">Travel or reset</button>
+    <button class="choice" onclick="pickFocus('Not sure yet')" data-en="I’m not sure yet" data-he="אני עדיין לא בטוח">I’m not sure yet</button>
+  </section>
+
+  <section id="intake" class="screen card">
+    <h2 data-en="A few quick questions" data-he="כמה שאלות קצרות">A few quick questions</h2>
+    <label>
+      <span data-en="How are you feeling right now?" data-he="איך אתה מרגיש עכשיו?">How are you feeling right now?</span>
+      <textarea id="feeling"></textarea>
+    </label>
+    <label>
+      <span data-en="Do you already have a plan for what comes next?" data-he="האם כבר יש לך תוכנית להמשך?">Do you already have a plan for what comes next?</span>
+      <textarea id="plan"></textarea>
+    </label>
+    <label>
+      <span data-en="What feels most urgent this week?" data-he="מה הכי דחוף לך השבוע?">What feels most urgent this week?</span>
+      <textarea id="urgent"></textarea>
+    </label>
+    <label>
+      <span data-en="Are you safe right now?" data-he="האם אתה בטוח עכשיו?">Are you safe right now?</span>
+      <select id="safe">
+        <option value="yes" data-en="Yes" data-he="כן">Yes</option>
+        <option value="unsure" data-en="I’m not sure" data-he="אני לא בטוח">I’m not sure</option>
+        <option value="no" data-en="No" data-he="לא">No</option>
+      </select>
+    </label>
+    <div class="row">
+      <button onclick="finishIntake()" data-en="Continue" data-he="המשך">Continue</button>
+      <button class="secondary" onclick="go('chat')" data-en="Skip for now" data-he="דלג כרגע">Skip for now</button>
+    </div>
+  </section>
+
+  <section id="safety" class="screen card safety">
+    <h2 data-en="Let’s focus on safety first" data-he="קודם נתמקד בבטיחות">Let’s focus on safety first</h2>
+    <p data-en="If you may be in immediate danger or may hurt yourself or someone else, contact local emergency services or a trusted person who can be with you now."
+       data-he="אם יש סכנה מיידית או חשש שתפגע בעצמך או באדם אחר, פנה מיד לשירותי החירום המקומיים או לאדם שאתה סומך עליו ויכול להיות איתך עכשיו.">
+       If you may be in immediate danger or may hurt yourself or someone else, contact local emergency services or a trusted person who can be with you now.
+    </p>
+    <p data-en="This prototype cannot contact emergency services for you."
+       data-he="אב־הטיפוס הזה אינו יכול ליצור קשר עם שירותי החירום עבורך.">
+       This prototype cannot contact emergency services for you.
+    </p>
+    <button onclick="go('chat')" data-en="Continue to chat" data-he="המשך לצ׳אט">Continue to chat</button>
+  </section>
+
+  <section id="chat" class="screen card">
+    <h2 data-en="Conversation" data-he="שיחה">Conversation</h2>
+    <div id="chatBox" class="chat"></div>
+    <textarea id="chatInput" placeholder="Type here..."></textarea>
+    <div class="row">
+      <button onclick="sendMessage()" data-en="Send" data-he="שלח">Send</button>
+      <button class="soft" onclick="go('map')" data-en="Personal map" data-he="המפה האישית">Personal map</button>
+    </div>
+    <p class="muted small" data-en="AI connection: this page expects a backend endpoint at /api/chat."
+       data-he="חיבור ל-AI: הדף מצפה לנקודת קצה בשרת בכתובת /api/chat.">
+       AI connection: this page expects a backend endpoint at /api/chat.
+    </p>
+  </section>
+
+  <section id="map" class="screen card">
+    <h2 data-en="Your personal map" data-he="המפה האישית שלך">Your personal map</h2>
+    <label><span data-en="Current focus" data-he="מוקד נוכחי">Current focus</span><input id="mapFocus"/></label>
+    <label><span data-en="What matters to me" data-he="מה חשוב לי">What matters to me</span><textarea id="mapValues"></textarea></label>
+    <label><span data-en="Strengths I want to use" data-he="חוזקות שאני רוצה להשתמש בהן">Strengths I want to use</span><textarea id="mapStrengths"></textarea></label>
+    <label><span data-en="My next step" data-he="הצעד הבא שלי">My next step</span><textarea id="mapNext"></textarea></label>
+    <div class="row">
+      <button onclick="saveMap()" data-en="Save" data-he="שמור">Save</button>
+      <button class="secondary" onclick="go('chat')" data-en="Back to chat" data-he="חזרה לצ׳אט">Back to chat</button>
+      <button class="secondary" onclick="exportData()" data-en="Export" data-he="ייצוא">Export</button>
+      <button class="danger" onclick="deleteData()" data-en="Delete all" data-he="מחק הכול">Delete all</button>
+    </div>
+  </section>
+</div>
+
+<script>
+  let language = localStorage.getItem('gtc_lang') || 'en';
+  let selectedFocus = localStorage.getItem('gtc_focus') || '';
+
+  function applyLanguage() {
+    document.documentElement.lang = language;
+    document.documentElement.dir = language === 'he' ? 'rtl' : 'ltr';
+    document.getElementById('langBtn').textContent = language === 'en' ? 'עברית' : 'English';
+    document.querySelectorAll('[data-en][data-he]').forEach(el => {
+      el.textContent = el.getAttribute(language === 'en' ? 'data-en' : 'data-he');
+    });
+    document.getElementById('brand').textContent =
+      language === 'en' ? 'Guided Transition Companion' : 'מלווה המעבר לחיים האזרחיים';
+  }
+
+  document.getElementById('langBtn').addEventListener('click', () => {
+    language = language === 'en' ? 'he' : 'en';
+    localStorage.setItem('gtc_lang', language);
+    applyLanguage();
+  });
+
+  function go(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function pickFocus(focus) {
+    selectedFocus = focus;
+    localStorage.setItem('gtc_focus', focus);
+    go('intake');
+  }
+
+  function finishIntake() {
+    const safe = document.getElementById('safe').value;
+    const intake = {
+      feeling: document.getElementById('feeling').value,
+      plan: document.getElementById('plan').value,
+      urgent: document.getElementById('urgent').value,
+      safe
+    };
+    localStorage.setItem('gtc_intake', JSON.stringify(intake));
+    if (safe !== 'yes') go('safety');
+    else {
+      addMessage('ai',
+        language === 'en'
+          ? `I’ve got it. We’ll start with ${selectedFocus || 'what matters most right now'}. We’ll keep this practical and take one step at a time.`
+          : `הבנתי. נתחיל ב${selectedFocus || 'מה שהכי חשוב עכשיו'}. נשמור על זה מעשי ונעשה צעד אחד בכל פעם.`
+      );
+      go('chat');
+    }
+  }
+
+  function addMessage(role, text) {
+    const box = document.getElementById('chatBox');
+    const div = document.createElement('div');
+    div.className = 'msg ' + (role === 'user' ? 'user' : 'ai');
+    div.textContent = text;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    addMessage('user', text);
+    input.value = '';
+
+    const lower = text.toLowerCase();
+    const urgentWords = ['kill myself','suicide','hurt myself','hurt someone','can’t stay safe',"can't stay safe"];
+    if (urgentWords.some(w => lower.includes(w))) {
+      addMessage('ai',
+        language === 'en'
+          ? 'I’m taking that seriously. If there is immediate danger, contact local emergency services or a trusted person who can be with you now. This prototype cannot contact them for you.'
+          : 'אני לוקח את זה ברצינות. אם יש סכנה מיידית, פנה לשירותי החירום המקומיים או לאדם שאתה סומך עליו ויכול להיות איתך עכשיו. אב־הטיפוס הזה אינו יכול לפנות אליהם עבורך.'
+      );
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          message: text,
+          language,
+          focus: selectedFocus,
+          intake: JSON.parse(localStorage.getItem('gtc_intake') || '{}')
+        })
+      });
+
+      if (!res.ok) throw new Error('Backend unavailable');
+      const data = await res.json();
+      addMessage('ai', data.reply || data.message || 'No reply received.');
+    } catch (e) {
+      addMessage('ai',
+        language === 'en'
+          ? 'The AI backend is not connected yet. The screen is working, and once the server is running this message will be sent to the AI.'
+          : 'שרת ה-AI עדיין לא מחובר. המסך עובד, וברגע שהשרת יופעל ההודעה תישלח ל-AI.'
+      );
+    }
+  }
+
+  function saveMap() {
+    const data = {
+      focus: document.getElementById('mapFocus').value,
+      values: document.getElementById('mapValues').value,
+      strengths: document.getElementById('mapStrengths').value,
+      next: document.getElementById('mapNext').value
+    };
+    localStorage.setItem('gtc_map', JSON.stringify(data));
+    alert(language === 'en' ? 'Saved on this device.' : 'נשמר במכשיר הזה.');
+  }
+
+  function loadMap() {
+    const data = JSON.parse(localStorage.getItem('gtc_map') || '{}');
+    document.getElementById('mapFocus').value = data.focus || selectedFocus || '';
+    document.getElementById('mapValues').value = data.values || '';
+    document.getElementById('mapStrengths').value = data.strengths || '';
+    document.getElementById('mapNext').value = data.next || '';
+  }
+
+  function exportData() {
+    const payload = {
+      focus: selectedFocus,
+      intake: JSON.parse(localStorage.getItem('gtc_intake') || '{}'),
+      personalMap: JSON.parse(localStorage.getItem('gtc_map') || '{}')
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'guided-transition-companion-export.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  function deleteData() {
+    if (!confirm(language === 'en' ? 'Delete all saved prototype data?' : 'למחוק את כל הנתונים שנשמרו?')) return;
+    ['gtc_focus','gtc_intake','gtc_map'].forEach(k => localStorage.removeItem(k));
+    selectedFocus = '';
+    loadMap();
+    alert(language === 'en' ? 'Deleted.' : 'נמחק.');
+  }
+
+  applyLanguage();
+  loadMap();
+
+  addMessage('ai',
+    language === 'en'
+      ? 'When you’re ready, tell me what is most important right now.'
+      : 'כשתהיה מוכן, ספר לי מה הכי חשוב לך עכשיו.'
+  );
+</script>
+</body>
+</html>
